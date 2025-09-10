@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="km">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ចុះឈ្មោះសិស្ស - Master-Computer AI</title>
+    <!-- Tailwind CSS for styling -->
+    <link rel="icon" type="image/png" href="./image/Profile.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- html2canvas for downloading receipt -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- Google Fonts: Kantumruy Pro -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        /* Custom styles for the page */
+        body {
+            font-family: 'Kantumruy Pro', sans-serif;
+            background: #0f172a;
+            /* Slate 900 */
+        }
+
+        .form-container {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-input {
+            background-color: #1e293b;
+            /* Slate 800 */
+            border: 1px solid #334155;
+            /* Slate 700 */
+            color: #f1f5f9;
+            /* Slate 100 */
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #38bdf8;
+            /* Sky 400 */
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25);
+        }
+
+        .submit-btn {
+            background: linear-gradient(90deg, #38bdf8, #3b82f6);
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(56, 189, 248, 0.2);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            color: #fb7185;
+            /* Rose 400 */
+            font-size: 0.875rem;
+        }
+
+        .input-error {
+            border-color: #fb7185 !important;
+        }
+
+        .fade-in {
+            animation: fadeInAnimation 1s ease-in-out forwards;
+        }
+
+        @keyframes fadeInAnimation {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body class="text-slate-200">
+
+    <!-- Background Decoration -->
+    <div
+        class="absolute top-0 left-0 w-full h-full bg-grid-slate-700/[0.2] [mask-image:linear-gradient(to_bottom,white_20%,transparent_100%)]">
+    </div>
+    <div class="absolute inset-0 z-0 overflow-hidden">
+        <div
+            class="absolute left-1/4 top-1/4 w-96 h-96 bg-sky-500 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse">
+        </div>
+        <div
+            class="absolute right-1/4 bottom-1/4 w-96 h-96 bg-indigo-500 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse delay-1000">
+        </div>
+    </div>
+
+
+    <div class="relative min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8 fade-in">
+        <!-- Header Section -->
+        <header class="text-center mb-8">
+            <img src="./image/Profile.png" alt="Master-Computer AI Logo"
+                class="mx-auto w-40 h-40 rounded-full object-cover border-4 border-slate-700 shadow-lg shadow-cyan-500/20">
+            <h1 class="text-3xl font-bold text-white mt-4">Master-Computer AI</h1>
+            <p class="text-lg text-slate-400 mt-1">សាលាបង្រៀន Computer</p>
+        </header>
+
+        <!-- Registration Form -->
+        <main class="w-full max-w-2xl">
+            <form id="registrationForm" class="form-container rounded-2xl shadow-2xl p-6 sm:p-8 space-y-6" novalidate>
+
+                <!-- Full Name -->
+                <div>
+                    <label for="fullName" class="block text-sm font-medium text-slate-300 mb-2">ឈ្មោះពេញ</label>
+                    <input type="text" id="fullName" name="fullName" class="form-input w-full rounded-lg px-4 py-2.5"
+                        placeholder="ឧ. សុខ ចាន់ដារ៉ា" required>
+                    <p id="fullNameError" class="error-message mt-1 h-4"></p>
+                </div>
+
+                <!-- Gender and DOB -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                        <label for="gender" class="block text-sm font-medium text-slate-300 mb-2">ភេទ</label>
+                        <select id="gender" name="gender" class="form-input w-full rounded-lg px-4 py-2.5" required>
+                            <option value="" disabled selected>-- ជ្រើសរើសភេទ --</option>
+                            <option value="ប្រុស">ប្រុស</option>
+                            <option value="ស្រី">ស្រី</option>
+                            <option value="ផ្សេងៗ">ផ្សេងៗ</option>
+                        </select>
+                        <p id="genderError" class="error-message mt-1 h-4"></p>
+                    </div>
+                    <div>
+                        <label for="dob" class="block text-sm font-medium text-slate-300 mb-2">ថ្ងៃខែឆ្នាំកំណើត</label>
+                        <input type="date" id="dob" name="dob" class="form-input w-full rounded-lg px-4 py-2.5"
+                            required>
+                        <p id="dobError" class="error-message mt-1 h-4"></p>
+                    </div>
+                </div>
+
+                <!-- Phone and Email -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-slate-300 mb-2">លេខទូរស័ព្ទ</label>
+                        <input type="tel" id="phone" name="phone" class="form-input w-full rounded-lg px-4 py-2.5"
+                            placeholder="ឧ. 012 345 678" required>
+                        <p id="phoneError" class="error-message mt-1 h-4"></p>
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-slate-300 mb-2">អ៊ីមែល</label>
+                        <input type="email" id="email" name="email" class="form-input w-full rounded-lg px-4 py-2.5"
+                            placeholder="ឧ. dara.sok@email.com" required>
+                        <p id="emailError" class="error-message mt-1 h-4"></p>
+                    </div>
+                </div>
+
+                <!-- Course Selection -->
+                <div>
+                    <label for="course" class="block text-sm font-medium text-slate-300 mb-2">ជ្រើសរើសវគ្គសិក្សា</label>
+                    <select id="course" name="course" class="form-input w-full rounded-lg px-4 py-2.5" required>
+                        <option value="" disabled selected>-- វគ្គសិក្សាដែលមាន --</option>
+                        <option value="កុំព្យូទ័រ កម្រឹតមូលដ្ឋាន">កុំព្យូទ័រ កម្រឹតមូលដ្ឋាន</option>
+                        <option value="Word ,Excel,Power Point">Word ,Excel,Power Point</option>
+                        <option value="3in1 add Internet">3in1 add Internet</option>
+                        <option value="4in1 add AI">4in1 add AI</option>
+                        <option value="គ្រប់វគ្គទាំងអស់">គ្រប់វគ្គទាំងអស់</option>
+                    </select>
+                    <p id="courseError" class="error-message mt-1 h-4"></p>
+                </div>
+
+                <!-- Address -->
+                <div>
+                    <label for="address"
+                        class="block text-sm font-medium text-slate-300 mb-2">អាសយដ្ឋានបច្ចុប្បន្ន</label>
+                    <textarea id="address" name="address" rows="3" class="form-input w-full rounded-lg px-4 py-2.5"
+                        placeholder="សូមបញ្ចូលអាសយដ្ឋានរបស់អ្នក..." required></textarea>
+                    <p id="addressError" class="error-message mt-1 h-4"></p>
+                </div>
+
+                <!-- Submit Button -->
+                <div>
+                    <button type="submit"
+                        class="submit-btn w-full text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline text-lg flex items-center justify-center">
+                        ចុះឈ្មោះឥឡូវនេះ
+                    </button>
+                </div>
+            </form>
+        </main>
+
+        <!-- Footer -->
+        <footer class="text-center mt-8 text-slate-500">
+            <p>&copy; 2025 Master-Computer AI. រក្សាសិទ្ធិគ្រប់យ៉ាង។</p>
+        </footer>
+    </div>
+
+    <!-- Success/Error Notification Modal (for errors) -->
+    <div id="notification"
+        class="fixed top-5 right-5 bg-slate-800 border border-slate-700 text-white px-6 py-4 rounded-lg shadow-lg transform translate-x-[120%] transition-transform duration-500 ease-in-out">
+        <p id="notificationMessage"></p>
+    </div>
+
+    <!-- Receipt Modal (for success) -->
+    <div id="receiptModal"
+        class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl shadow-2xl border border-slate-700 max-w-md w-full relative text-white transform scale-95 transition-transform duration-300"
+            id="receiptContainer">
+            <!-- This is the content that will be downloaded -->
+            <div id="receiptContent" class="p-8 bg-gradient-to-br from-slate-800 to-slate-900">
+                <div class="text-center mb-6">
+                    <img src="./image/Profile.png" alt="Logo"
+                        class="w-24 h-24 rounded-full mx-auto mb-4 border-2 border-cyan-400">
+                    <h2 class="text-2xl font-bold text-cyan-400">Master-Computer AI</h2>
+                    <p class="text-slate-400">ប័ណ្ណបញ្ជាក់ការចុះឈ្មោះ</p>
+                </div>
+                <div class="space-y-3 text-sm">
+                    <div class="flex justify-between border-b border-slate-700 pb-2">
+                        <span class="text-slate-400">ឈ្មោះពេញ:</span>
+                        <span id="receiptFullName" class="font-semibold"></span>
+                    </div>
+                    <div class="flex justify-between border-b border-slate-700 pb-2">
+                        <span class="text-slate-400">វគ្គសិក្សា:</span>
+                        <span id="receiptCourse" class="font-semibold text-right"></span>
+                    </div>
+                    <div class="flex justify-between border-b border-slate-700 pb-2">
+                        <span class="text-slate-400">អ៊ីមែល:</span>
+                        <span id="receiptEmail" class="font-semibold"></span>
+                    </div>
+                    <div class="flex justify-between border-b border-slate-700 pb-2">
+                        <span class="text-slate-400">កាលបរិច្ឆេទ:</span>
+                        <span id="receiptDate" class="font-semibold"></span>
+                    </div>
+                </div>
+                <div class="text-center mt-8">
+                    <img src="./image/QRGroup.png" alt="QR Code"
+                        class="mx-auto w-28 h-28 rounded-xl bg-white p-1.5 border-2 border-slate-600 shadow-md">
+                    <p class="text-xs text-slate-500 mt-4">សូមរក្សាទុកប័ណ្ណនេះសម្រាប់ជាឯកសារយោង។</p>
+                </div>
+            </div>
+            <!-- Action Buttons (not part of the download) -->
+            <div class="px-8 pb-8 flex space-x-4">
+                <button id="downloadReceiptBtn"
+                    class="flex-1 bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-6 rounded-lg transition-colors flex items-center justify-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    <span>ទាញយក</span>
+                </button>
+                <button id="closeReceiptBtn"
+                    class="flex-1 bg-slate-600 hover:bg-slate-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                    បិទ
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        const form = document.getElementById('registrationForm');
+        // Notification for errors
+        const notification = document.getElementById('notification');
+        const notificationMessage = document.getElementById('notificationMessage');
+        let notificationTimeout;
+
+        // Receipt Modal for success
+        const receiptModal = document.getElementById('receiptModal');
+        const receiptContainer = document.getElementById('receiptContainer');
+        const downloadReceiptBtn = document.getElementById('downloadReceiptBtn');
+        const closeReceiptBtn = document.getElementById('closeReceiptBtn');
+
+        // !!! សំខាន់ !!! សូមដាក់ Google Apps Script URL របស់អ្នកនៅទីនេះ
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwhk-bxpmOihfltARyG2PjEEYAdh1HiQdC84oBKxB_qMJUngo8jC3zcMSPULNYNMcYmJA/exec';
+
+        const fields = {
+            fullName: { input: document.getElementById('fullName'), error: document.getElementById('fullNameError'), message: 'សូមបញ្ចូលឈ្មោះពេញ' },
+            gender: { input: document.getElementById('gender'), error: document.getElementById('genderError'), message: 'សូមជ្រើសរើសភេទ' },
+            dob: { input: document.getElementById('dob'), error: document.getElementById('dobError'), message: 'សូមបញ្ចូលថ្ងៃខែឆ្នាំកំណើត' },
+            phone: { input: document.getElementById('phone'), error: document.getElementById('phoneError'), message: 'សូមបញ្ចូលលេខទូរស័ព្ទ', validator: (val) => /^[0-9\s-()+]{8,}$/.test(val) },
+            email: { input: document.getElementById('email'), error: document.getElementById('emailError'), message: 'សូមបញ្ចូលអ៊ីមែលដែលត្រឹមត្រូវ', validator: (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val) },
+            course: { input: document.getElementById('course'), error: document.getElementById('courseError'), message: 'សូមជ្រើសរើសវគ្គសិក្សា' },
+            address: { input: document.getElementById('address'), error: document.getElementById('addressError'), message: 'សូមបញ្ចូលអាសយដ្ឋាន' }
+        };
+
+        function showNotification(message) {
+            clearTimeout(notificationTimeout);
+            notificationMessage.textContent = message;
+            notification.classList.add('bg-rose-500', 'border-rose-400');
+            notification.classList.remove('translate-x-[120%]');
+            notification.classList.add('translate-x-0');
+
+            notificationTimeout = setTimeout(() => {
+                notification.classList.remove('translate-x-0');
+                notification.classList.add('translate-x-[120%]');
+            }, 5000);
+        }
+
+        function showReceipt(data) {
+            document.getElementById('receiptFullName').textContent = data.fullName;
+            document.getElementById('receiptCourse').textContent = data.course;
+            document.getElementById('receiptEmail').textContent = data.email;
+            document.getElementById('receiptDate').textContent = new Date().toLocaleDateString('km-KH', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+            receiptModal.classList.remove('hidden');
+            setTimeout(() => {
+                receiptModal.classList.remove('opacity-0');
+                receiptContainer.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function hideReceipt() {
+            receiptModal.classList.add('opacity-0');
+            receiptContainer.classList.add('scale-95');
+            setTimeout(() => {
+                receiptModal.classList.add('hidden');
+            }, 300);
+        }
+
+        closeReceiptBtn.addEventListener('click', hideReceipt);
+
+        downloadReceiptBtn.addEventListener('click', () => {
+            const receiptElement = document.getElementById('receiptContent');
+            downloadReceiptBtn.textContent = 'កំពុងទាញយក...';
+            html2canvas(receiptElement, {
+                backgroundColor: '#0f172a',
+                scale: 3 // Higher resolution for better quality
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `MCAI-Registration-${Date.now()}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                downloadReceiptBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                    <span>ទាញយក</span>
+                `;
+            });
+        });
+
+
+        function validateField(field) {
+            const { input, error, message, validator } = field;
+            const value = input.value.trim();
+            let isValid = true;
+            let errorMessage = '';
+
+            if (value === '') {
+                isValid = false;
+                errorMessage = message;
+            } else if (validator && !validator(value)) {
+                isValid = false;
+                errorMessage = message;
+            }
+
+            if (isValid) {
+                input.classList.remove('input-error');
+                error.textContent = '';
+            } else {
+                input.classList.add('input-error');
+                error.textContent = errorMessage;
+            }
+            return isValid;
+        }
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const submitButton = form.querySelector('button[type="submit"]');
+
+            let isFormValid = true;
+            Object.values(fields).forEach(field => {
+                if (!validateField(field)) {
+                    isFormValid = false;
+                }
+            });
+
+            if (isFormValid) {
+                submitButton.disabled = true;
+                submitButton.innerHTML = `
+                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    កំពុងដំណើរការ...
+                `;
+
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData.entries());
+
+                fetch(scriptURL, {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+                })
+                    .then(res => res.ok ? res.json() : Promise.reject('Network response was not ok'))
+                    .then(response => {
+                        if (response.result === 'success') {
+                            showReceipt(data);
+                            form.reset();
+                        } else {
+                            throw new Error(response.error || 'An unknown error occurred.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error!', error.message);
+                        showNotification('មានបញ្ហាក្នុងការបញ្ជូនទិន្នន័យ។ សូមព្យាយាមម្តងទៀត។');
+                    })
+                    .finally(() => {
+                        submitButton.disabled = false;
+                        submitButton.textContent = 'ចុះឈ្មោះឥឡូវនេះ';
+                    });
+
+            } else {
+                showNotification('សូមពិនិត្យមើលទិន្នន័យរបស់អ្នកម្តងទៀត។');
+            }
+        });
+
+        Object.values(fields).forEach(field => {
+            field.input.addEventListener('input', () => validateField(field));
+        });
+    </script>
+</body>
+
+</html>
