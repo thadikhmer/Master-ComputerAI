@@ -174,6 +174,18 @@
                     <p id="addressError" class="error-message mt-1 h-4"></p>
                 </div>
 
+                <!-- START: Photo Upload Field -->
+                <div>
+                    <label for="photo" class="block text-sm font-medium text-slate-300 mb-2">រូបថត (ទំហំតូចជាង 5MB)</label>
+                    <div class="mt-2 flex flex-col sm:flex-row items-center gap-4">
+                         <img id="photoPreview" class="h-24 w-24 rounded-full object-cover bg-slate-700 border-2 border-slate-600" 
+                             src="https://placehold.co/96x96/1e293b/f1f5f9?text=រូបថត" alt="Photo Preview">
+                        <input type="file" id="photo" name="photo" class="form-input block w-full text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-sky-500 file:text-white hover:file:bg-sky-600 cursor-pointer" accept="image/jpeg, image/png, image/gif" required>
+                    </div>
+                    <p id="photoError" class="error-message mt-1 h-4"></p>
+                </div>
+                <!-- END: Photo Upload Field -->
+
                 <div>
                     <button type="submit"
                         class="submit-btn w-full text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline text-lg flex items-center justify-center">
@@ -252,18 +264,15 @@
 
     <script>
         const form = document.getElementById('registrationForm');
-        // Notification for errors
         const notification = document.getElementById('notification');
         const notificationMessage = document.getElementById('notificationMessage');
         let notificationTimeout;
 
-        // Receipt Modal for success
         const receiptModal = document.getElementById('receiptModal');
         const receiptContainer = document.getElementById('receiptContainer');
         const downloadReceiptBtn = document.getElementById('downloadReceiptBtn');
         const closeReceiptBtn = document.getElementById('closeReceiptBtn');
 
-        // !!! សំខាន់ !!! សូមដាក់ Google Apps Script URL របស់អ្នកនៅទីនេះ
         const scriptURL = 'https://script.google.com/macros/s/AKfycbwhk-bxpmOihfltARyG2PjEEYAdh1HiQdC84oBKxB_qMJUngo8jC3zcMSPULNYNMcYmJA/exec';
 
         const fields = {
@@ -273,8 +282,32 @@
             phone: { input: document.getElementById('phone'), error: document.getElementById('phoneError'), message: 'សូមបញ្ចូលលេខទូរស័ព្ទ', validator: (val) => /^[0-9\s-()+]{8,}$/.test(val) },
             email: { input: document.getElementById('email'), error: document.getElementById('emailError'), message: 'សូមបញ្ចូលអ៊ីមែលដែលត្រឹមត្រូវ', validator: (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val) },
             course: { input: document.getElementById('course'), error: document.getElementById('courseError'), message: 'សូមជ្រើសរើសវគ្គសិក្សា' },
-            address: { input: document.getElementById('address'), error: document.getElementById('addressError'), message: 'សូមបញ្ចូលអាសយដ្ឋាន' }
+            address: { input: document.getElementById('address'), error: document.getElementById('addressError'), message: 'សូមបញ្ចូលអាសយដ្ឋាន' },
+            photo: { input: document.getElementById('photo'), error: document.getElementById('photoError'), message: 'សូមជ្រើសរើសរូបថត' }
         };
+        
+        const photoInput = document.getElementById('photo');
+        const photoPreview = document.getElementById('photoPreview');
+        const defaultPhotoSrc = 'https://placehold.co/96x96/1e293b/f1f5f9?text=រូបថត';
+
+        photoInput.addEventListener('change', () => {
+            const file = photoInput.files[0];
+            if (file) {
+                if (file.size > 5 * 1024 * 1024) { // 5MB size limit
+                    fields.photo.error.textContent = 'ទំហំរូបថតត្រូវតែតូចជាង 5MB';
+                    fields.photo.input.classList.add('input-error');
+                    photoInput.value = ''; 
+                    photoPreview.src = defaultPhotoSrc;
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    photoPreview.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+                validateField(fields.photo); 
+            }
+        });
 
         function showNotification(message) {
             clearTimeout(notificationTimeout);
@@ -317,7 +350,7 @@
             downloadReceiptBtn.textContent = 'កំពុងទាញយក...';
             html2canvas(receiptElement, {
                 backgroundColor: '#0f172a',
-                scale: 3 // Higher resolution for better quality
+                scale: 3
             }).then(canvas => {
                 const link = document.createElement('a');
                 link.download = `MCAI-Registration-${Date.now()}.png`;
@@ -330,14 +363,18 @@
             });
         });
 
-
         function validateField(field) {
             const { input, error, message, validator } = field;
             const value = input.value.trim();
             let isValid = true;
             let errorMessage = '';
 
-            if (value === '') {
+            if (input.type === 'file') {
+                 if (input.files.length === 0) {
+                    isValid = false;
+                    errorMessage = message;
+                 }
+            } else if (value === '') {
                 isValid = false;
                 errorMessage = message;
             } else if (validator && !validator(value)) {
@@ -367,40 +404,53 @@
             });
 
             if (isFormValid) {
+                const file = fields.photo.input.files[0];
+                const reader = new FileReader();
+
                 submitButton.disabled = true;
                 submitButton.innerHTML = `
                     <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    កំពុងដំណើរការ...
-                `;
+                    កំពុងដំណើរការ...`;
+                
+                reader.onloadend = function() {
+                    const fileDataParts = reader.result.split(',');
+                    const formData = new FormData(form);
+                    const data = Object.fromEntries(formData.entries());
 
-                const formData = new FormData(form);
-                const data = Object.fromEntries(formData.entries());
+                    data.photoBase64 = fileDataParts[1];
+                    data.photoMimeType = fileDataParts[0].match(/:(.*?);/)[1];
+                    data.fileName = file.name;
+                    delete data.photo; 
 
-                fetch(scriptURL, {
-                    method: 'POST',
-                    body: JSON.stringify(data),
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' }
-                })
-                    .then(res => res.ok ? res.json() : Promise.reject('Network response was not ok'))
+                    fetch(scriptURL, {
+                        method: 'POST',
+                        body: JSON.stringify(data),
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+                    })
+                    .then(res => res.ok ? res.json() : Promise.reject(res.text()))
                     .then(response => {
                         if (response.result === 'success') {
                             showReceipt(data);
                             form.reset();
+                            photoPreview.src = defaultPhotoSrc;
                         } else {
                             throw new Error(response.error || 'An unknown error occurred.');
                         }
                     })
                     .catch(error => {
-                        console.error('Error!', error.message);
+                        console.error('Error!', error);
                         showNotification('មានបញ្ហាក្នុងការបញ្ជូនទិន្នន័យ។ សូមព្យាយាមម្តងទៀត។');
                     })
                     .finally(() => {
                         submitButton.disabled = false;
                         submitButton.textContent = 'ចុះឈ្មោះឥឡូវនេះ';
                     });
+                };
+                
+                reader.readAsDataURL(file);
 
             } else {
                 showNotification('សូមពិនិត្យមើលទិន្នន័យរបស់អ្នកម្តងទៀត។');
