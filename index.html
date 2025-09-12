@@ -5,12 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ចុះឈ្មោះសិស្ស - Master-Computer AI</title>
-    <!-- Tailwind CSS for styling -->
     <link rel="icon" type="image/png" href="./image/Profile.png">
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- html2canvas for downloading receipt -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <!-- Google Fonts: Kantumruy Pro -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700&display=swap"
@@ -91,7 +88,6 @@
 
 <body class="text-slate-200">
 
-    <!-- Background Decoration -->
     <div
         class="absolute top-0 left-0 w-full h-full bg-grid-slate-700/[0.2] [mask-image:linear-gradient(to_bottom,white_20%,transparent_100%)]">
     </div>
@@ -106,7 +102,6 @@
 
 
     <div class="relative min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8 fade-in">
-        <!-- Header Section -->
         <header class="text-center mb-8">
             <img src="./image/Profile.png" alt="Master-Computer AI Logo"
                 class="mx-auto w-40 h-40 rounded-full object-cover border-4 border-slate-700 shadow-lg shadow-cyan-500/20">
@@ -114,11 +109,9 @@
             <p class="text-lg text-slate-400 mt-1">សាលាបង្រៀន Computer</p>
         </header>
 
-        <!-- Registration Form -->
         <main class="w-full max-w-2xl">
             <form id="registrationForm" class="form-container rounded-2xl shadow-2xl p-6 sm:p-8 space-y-6" novalidate>
 
-                <!-- Full Name -->
                 <div>
                     <label for="fullName" class="block text-sm font-medium text-slate-300 mb-2">ឈ្មោះពេញ</label>
                     <input type="text" id="fullName" name="fullName" class="form-input w-full rounded-lg px-4 py-2.5"
@@ -126,7 +119,6 @@
                     <p id="fullNameError" class="error-message mt-1 h-4"></p>
                 </div>
 
-                <!-- Gender and DOB -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
                         <label for="gender" class="block text-sm font-medium text-slate-300 mb-2">ភេទ</label>
@@ -146,7 +138,6 @@
                     </div>
                 </div>
 
-                <!-- Phone and Email -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
                         <label for="phone" class="block text-sm font-medium text-slate-300 mb-2">លេខទូរស័ព្ទ</label>
@@ -162,7 +153,6 @@
                     </div>
                 </div>
 
-                <!-- Course Selection -->
                 <div>
                     <label for="course" class="block text-sm font-medium text-slate-300 mb-2">ជ្រើសរើសវគ្គសិក្សា</label>
                     <select id="course" name="course" class="form-input w-full rounded-lg px-4 py-2.5" required>
@@ -176,7 +166,6 @@
                     <p id="courseError" class="error-message mt-1 h-4"></p>
                 </div>
 
-                <!-- Address -->
                 <div>
                     <label for="address"
                         class="block text-sm font-medium text-slate-300 mb-2">អាសយដ្ឋានបច្ចុប្បន្ន</label>
@@ -185,7 +174,6 @@
                     <p id="addressError" class="error-message mt-1 h-4"></p>
                 </div>
 
-                <!-- Submit Button -->
                 <div>
                     <button type="submit"
                         class="submit-btn w-full text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline text-lg flex items-center justify-center">
@@ -195,24 +183,20 @@
             </form>
         </main>
 
-        <!-- Footer -->
         <footer class="text-center mt-8 text-slate-500">
             <p>&copy; 2025 Master-Computer AI. រក្សាសិទ្ធិគ្រប់យ៉ាង។</p>
         </footer>
     </div>
 
-    <!-- Success/Error Notification Modal (for errors) -->
     <div id="notification"
         class="fixed top-5 right-5 bg-slate-800 border border-slate-700 text-white px-6 py-4 rounded-lg shadow-lg transform translate-x-[120%] transition-transform duration-500 ease-in-out">
         <p id="notificationMessage"></p>
     </div>
 
-    <!-- Receipt Modal (for success) -->
     <div id="receiptModal"
         class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50 hidden opacity-0 transition-opacity duration-300">
         <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl shadow-2xl border border-slate-700 max-w-md w-full relative text-white transform scale-95 transition-transform duration-300"
             id="receiptContainer">
-            <!-- This is the content that will be downloaded -->
             <div id="receiptContent" class="p-8 bg-gradient-to-br from-slate-800 to-slate-900">
                 <div class="text-center mb-6">
                     <img src="./image/Profile.png" alt="Logo"
@@ -239,12 +223,14 @@
                     </div>
                 </div>
                 <div class="text-center mt-8">
-                    <img src="./image/QRGroup.png" alt="QR Code"
-                        class="mx-auto w-28 h-28 rounded-xl bg-white p-1.5 border-2 border-slate-600 shadow-md">
+                    <a href="https://t.me/+_9EoQokCVMszMjU1" target="_blank" rel="noopener noreferrer"
+                        title="ចូលរួមក្រុម Telegram">
+                        <img src="./image/QRGroup.png" alt="QR Code"
+                            class="mx-auto w-28 h-28 rounded-xl bg-white p-1.5 border-2 border-slate-600 shadow-md hover:opacity-80 transition-opacity cursor-pointer">
+                    </a>
                     <p class="text-xs text-slate-500 mt-4">សូមរក្សាទុកប័ណ្ណនេះសម្រាប់ជាឯកសារយោង។</p>
                 </div>
             </div>
-            <!-- Action Buttons (not part of the download) -->
             <div class="px-8 pb-8 flex space-x-4">
                 <button id="downloadReceiptBtn"
                     class="flex-1 bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-6 rounded-lg transition-colors flex items-center justify-center space-x-2">
